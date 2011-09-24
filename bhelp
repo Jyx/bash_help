@@ -1,0 +1,258 @@
+#!/bin/bash
+# vim:set ts=8 sw=8 tw=80 fdm=marker ff=unix expandtab:
+# for matching vhwere comments should start: match Comment '\%>48v.\+'
+
+function help_bash()
+{
+#{{{
+clear
+cat <<EOF
+bash
+================================================================================
+Find files:
+  find . -name "myfile"
+  find . -name "*.swp" -exec rm -f {} \;        Find and delete all *.swp-files
+  find . -name "*.m3u" -o name "*.mp3"          Find different kind of files
+  find . -name "*.[ch]" | xargs grep foo        Search for foo in all c/h-files
+  find . ! -name "*.ogg"                        Find all files except ogg-files
+
+Case statement:
+  case $1 in
+    param1)
+    ;;
+
+    param2)
+    ;;
+  esac
+================================================================================
+EOF
+#}}}
+}
+
+function help_gcc()
+{
+#{{{
+clear
+cat <<EOF
+gcc
+================================================================================
+================================================================================
+EOF
+#}}}
+}
+
+function help_git()
+{
+#{{{
+clear
+cat <<EOF
+git
+================================================================================
+Patch handling:
+  git am < 0001-foo.patch                       Apply 0001-foo.patch
+  git am --whitespace=fix < 0001-foo.patch      - || - and remove whitespaces
+  git apply --check 0001-foo.patch              Apply 0001-foo.patch
+  git apply --reject 0001-foo.patch             Apply and create *.rej files
+  git am --resolved                             Commit a patch after solving
+                                                conflicts
+
+Merge / Rebase
+  git pull --rebase                             Rebase a branch (tracking)
+  git pull origin master                        Merge branch master from origin
+
+Branch commands:
+  git checkout -b foo                           Create a branch foo
+  git checkout --track -b foo origin/foo        Create and follow a branch
+  git checkout -t origin/foo                    Create and follow a branch
+  git branch -D foo                             Delete branch foo (force)
+  git branch -d foo                             Delete branch foo
+
+Config commands:
+  git config --global user.name "Joakim Bech"
+  git config --global user.email "joakim.bech@gmail.com"
+
+================================================================================
+EOF
+#}}}
+}
+
+function help_gpg()
+{
+#{{{
+clear
+cat <<EOF
+gpg
+================================================================================
+gpg --gen-key                                   Create a keypair
+gpg --list-keys                                 List all keys
+gpg --import tmp/gnupg/secring.gpg              Import keyring
+gpg --import my_friends_key.asc                 Import ASCII key
+gpg --edit-key joakim                           Edit key "joakim"
+gpg --armor --export 060AB907 > joakimbech.asc  Create public key in ASCII
+gpg -K                                          List all keys from secret
+                                                keyring
+gpg -e -r Joakim my_plaintext_file.txt          Encrypt a file using key Joakim
+gpg -o plain.txt -d cipher.txt.gpg              Decrypt file cipher.txt to
+                                                plain.txt
+gpg -d cipher.txt.gpg                           Decrypt a file
+
+gpg --verify foo.tar.gz.{asc|sig} foo.tar.gz    Verify signature of a file
+gpg --armor --detach-sign foo.tar.gz            Create a detached signature
+gpg --delete-key 'myfriend@his.isp.com'         Remove a key
+gpg --delete-secret-key 'mysecretkey'           Remove a secret key
+================================================================================
+EOF
+#}}}
+}
+
+function help_make()
+{
+#{{{
+clear
+cat <<EOF
+make
+================================================================================
+================================================================================
+EOF
+#}}}
+}
+
+function help_perl()
+{
+#{{{
+clear
+cat <<EOF
+perl
+================================================================================
+================================================================================
+EOF
+#}}}
+}
+
+function help_repo()
+{
+#{{{
+clear
+cat <<EOF
+repo
+================================================================================
+================================================================================
+EOF
+#}}}
+}
+
+function help_ssh()
+{
+#{{{
+clear
+cat <<EOF
+ssh
+================================================================================
+ssh-keygen -t rsa -C "joakim.bech@gmail.com"    Create SSH-keypair
+eval \`ssh-agent\`                              Start ssh-agent and set env
+ssh-add ~/.ssh/id_rsa                           Add your private key to agent
+================================================================================
+EOF
+#}}}
+}
+
+function help_tar()
+{
+#{{{
+clear
+cat <<EOF
+tar
+================================================================================
+tar -xvf foo.tar.gz                             Unpack tar.gz file
+tar -czvf foo.tar.gz folder/                    Create a tar.gz file of 'folder'
+tar -cjf foo.tar.bz2 folder/                    Create tar.bz2 file
+tar -cpjf foo.tar.bz2 folder/                   - || -, keep permissions
+tar -jxvf foo.tar.bz2                           Unpack tar.bz2 file
+================================================================================
+EOF
+#}}}
+}
+
+function help_vim()
+{
+#{{{
+clear
+cat <<EOF
+vim
+================================================================================
+:match Comment '\%>48v.\+'                      Highlight everything after
+                                                column 48 with color 'Comment'
+:set modeline                                   Automatic mode based on settings
+                                                in file
+================================================================================
+EOF
+#}}}
+}
+
+
+function help()
+{
+#{{{
+cat <<EOF
+Usage:  $0 [option] section
+        Section: bash
+                 gcc
+                 git
+                 gpg
+                 make
+                 repo
+                 perl
+                 ssh
+                 tar
+                 vim
+EOF
+#}}}
+}
+
+
+case $1 in
+        bash)
+        help_bash
+        ;;
+
+        gcc)
+        help_gcc
+        ;;
+
+        git)
+        help_git
+        ;;
+
+        gpg)
+        help_gpg
+        ;;
+
+        make)
+        help_make
+        ;;
+
+
+        repo)
+        help_repo
+        ;;
+
+        perl)
+        help_perl
+        ;;
+
+        ssh)
+        help_ssh
+        ;;
+
+        tar)
+        help_tar
+        ;;
+
+        vim)
+        help_vim
+        ;;
+
+        *)
+        help
+        ;;
+esac
