@@ -109,6 +109,22 @@ gpg --verify foo.tar.gz.{asc|sig} foo.tar.gz    Verify signature of a file
 gpg --armor --detach-sign foo.tar.gz            Create a detached signature
 gpg --delete-key 'myfriend@his.isp.com'         Remove a key
 gpg --delete-secret-key 'mysecretkey'           Remove a secret key
+
+Change uid
+  gpg --edit-key Joakim
+    uid 2                                       Number of the email/uid
+    primary
+    save
+
+Add uid
+  gpg --edit-key Joakim
+    adduid
+    save
+
+Delete uid
+  gpg --edit-key Joakim
+    deluid 2                                    Number of the email/uid
+    save
 ================================================================================
 EOF
 #}}}
