@@ -36,6 +36,15 @@ clear
 cat <<EOF
 gcc
 ================================================================================
+gcc -E foo.c                                    Print preprocessed file
+gcc -E -dM foo.c                                Print all #defines
+gcc -g foo.c                                    Produce debugging information
+gcc -ggdb foo.c                                 - || - tailored for GDB
+gcc -MM foo.c                                   Create a dependency file
+
+objdump -t foo.c                                Print symbols
+objdump -t -d foo.c                             - || - and disassemble
+objdump -S foo.c                                - || - mixed with source
 ================================================================================
 EOF
 #}}}
@@ -112,6 +121,14 @@ clear
 cat <<EOF
 make
 ================================================================================
+make                                            Invoke make using Makefile
+make -f mymakefile.mk                           Invoke make using mymakefile.mk
+make -B                                         Rebuild everything
+make -C directory/                              Invoke Makefile in "directory"
+make -n                                         Dry run without building
+make --warn-undefined-variables                 Warn when seeing undefined var
+make -p                                         Print database
+make -p -f/dev/null                             Print database without rebuild
 ================================================================================
 EOF
 #}}}
@@ -146,11 +163,14 @@ function help_ssh()
 #{{{
 clear
 cat <<EOF
-ssh
+ssh, scp
 ================================================================================
 ssh-keygen -t rsa -C "joakim.bech@gmail.com"    Create SSH-keypair
-eval \`ssh-agent\`                              Start ssh-agent and set env
+eval \`ssh-agent\`                                Start ssh-agent and set env
 ssh-add ~/.ssh/id_rsa                           Add your private key to agent
+
+scp file joakim@111.222.333.444:~/              Copy file to \$HOME
+scp joakim@111.222.333.444:~/ \$HOME/            Copy from network to \$HOME
 ================================================================================
 EOF
 #}}}
@@ -211,11 +231,24 @@ EOF
 
 
 case $1 in
-        bash)
+        all)
+        help_bash
+        help_gcc
+        help_git
+        help_gpg
+        help_make
+        help_repo
+        help_perl
+        help_ssh
+        help_tar
+        help_vim
+        ;;
+
+        bash|find|exec)
         help_bash
         ;;
 
-        gcc)
+        gcc|objdump)
         help_gcc
         ;;
 
@@ -240,7 +273,7 @@ case $1 in
         help_perl
         ;;
 
-        ssh)
+        ssh|scp)
         help_ssh
         ;;
 
