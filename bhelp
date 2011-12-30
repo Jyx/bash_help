@@ -162,6 +162,24 @@ EOF
 #}}}
 }
 
+function help_rsync()
+{
+#{{{
+clear
+cat <<EOF
+rsync
+================================================================================
+  rsync -avh /src/folder1 /dest                 Backup folder1 to /dest/
+  rsync -avh /src/folder1/ /dest                Backup subdirs to folder1
+        --progress                              Show progress
+        --max-size=4g-1                         Max size for FAT32 files
+        --itemize-changes                       Show what changes done
+        --modify-window=<sec>                   Fix samba time skew issue
+================================================================================
+EOF
+#}}}
+}
+
 function help_repo()
 {
 #{{{
@@ -255,6 +273,7 @@ case $1 in
         help_make
         help_repo
         help_perl
+        help_rsync
         help_ssh
         help_tar
         help_vim
@@ -287,6 +306,10 @@ case $1 in
 
         perl)
         help_perl
+        ;;
+
+        rsync)
+        help_rsync
         ;;
 
         ssh|scp)
