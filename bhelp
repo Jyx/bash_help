@@ -2,6 +2,33 @@
 # vim:set ts=8 sw=8 tw=80 fdm=marker ff=unix expandtab:
 # for matching vhwere comments should start: match Comment '\%>48v.\+'
 
+function help_adb()
+{
+#{{{
+clear
+cat <<EOF
+adb
+================================================================================
+adb kill-server                                 Kill a running adb service
+adb devices                                     Connect to available device
+adb remount                                     Make readonly fs writable
+adb shell                                       Open a shell on the target
+adb push host/foo.c target/foo.c                Copy from host to target
+adb pull target/foo.c host/foo.c                Copy from target to host
+adb forward tcp:1234 tcp:1234                   Forward TCP traffic
+adb shell input keyevent 82                     Unlock main screen
+
+~/.android/adb_usb.ini
+  # ANDROID 3RD PARTY USB VENDOR ID LIST -- DO NOT EDIT.
+  # USE 'android update adb' TO GENERATE.
+  # 1 USB VENDOR ID PER LINE.
+  0x04cc
+
+================================================================================
+EOF
+#}}}
+}
+
 function help_bash()
 {
 #{{{
@@ -15,15 +42,23 @@ Find files:
   find . -name "*.m3u" -o name "*.mp3"          Find different kind of files
   find . -name "*.[ch]" | xargs grep foo        Search for foo in all c/h-files
   find . ! -name "*.ogg"                        Find all files except ogg-files
+  find -L \`pwd\` -name "*.[ch]" > cscope.files \ Generate cscope files for all
+        && cscope -b -k -q                      -c and -h files
 
 Case statement:
-  case $1 in
+  case \$1 in
     param1)
     ;;
 
     param2)
     ;;
   esac
+
+Mount:
+  mount.cifs //111.222.333.444/foo my_directory -o username=\${USER}
+  umount.cifs my_mounted_folder
+  mkdir /debugfs && mount -t debugfs none /debugfs      Mount debugfs
+
 ================================================================================
 EOF
 #}}}
@@ -45,6 +80,11 @@ gcc -MM foo.c                                   Create a dependency file
 objdump -t foo.c                                Print symbols
 objdump -t -d foo.c                             - || - and disassemble
 objdump -S foo.c                                - || - mixed with source
+
+EXTRA_CFLAGS += -O0                             Optimize flag in Linux kernel
+
+export CROSS_COMPILE=arm-eabi-                  Setup CROSS_COMPILE prefix
+ARCH=arm ./decodecode < oops.log                Parse oops dump
 ================================================================================
 EOF
 #}}}
@@ -64,6 +104,8 @@ Patch handling:
   git apply --reject 0001-foo.patch             Apply and create *.rej files
   git am --resolved                             Commit a patch after solving
                                                 conflicts
+  git push origin HEAD:refs/for/mybranch        Push new patches to gerrit
+  git push origin HEAD:refs/changes/12345       Update patch in gerrit
 
 Merge / Rebase
   git pull --rebase                             Rebase a branch (tracking)
@@ -76,10 +118,20 @@ Branch commands:
   git branch -D foo                             Delete branch foo (force)
   git branch -d foo                             Delete branch foo
 
+Diff commands:
+  git diff sha1_commit..sha1_commit             Diff between two commits
+  git diff HEAD^                                See changes on latest patch
+  git diff HEAD^ --stat                         See which files are changed
+  git diff -M -w --color-words                  Diff side by side
+  git diff --check HEAD^                        Check for whitespace errors
+
+Log commands:
+  git log --pretty=format:%Cred%h\ %Cgreen%an%Cblue\ %s
+  git log --pretty=format:%Cred%h\ %Cgreen%an%Cblue\ %s --topo-order --graph
+
 Config commands:
   git config --global user.name "Joakim Bech"
   git config --global user.email "joakim.bech@gmail.com"
-
 ================================================================================
 EOF
 #}}}
@@ -249,7 +301,8 @@ function help()
 #{{{
 cat <<EOF
 Usage:  $0 [option] section
-        Section: bash
+        Section: adb
+                 bash
                  gcc
                  git
                  gpg
@@ -266,6 +319,7 @@ EOF
 
 case $1 in
         all)
+        help_adb
         help_bash
         help_gcc
         help_git
@@ -277,6 +331,10 @@ case $1 in
         help_ssh
         help_tar
         help_vim
+        ;;
+
+        adb)
+        help_adb
         ;;
 
         bash|find|exec)
@@ -298,7 +356,6 @@ case $1 in
         make)
         help_make
         ;;
-
 
         repo)
         help_repo
